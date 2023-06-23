@@ -1,0 +1,40 @@
+<table width="600" class="container darkBG" cellpadding="0" cellspacing="0" border="0" bgcolor="%%=v(@bgcolor)=%%">
+   <tr>
+     <td align="center" style="padding-top: 20px; padding-bottom: 20px;">
+       <table cellpadding="0" cellspacing="0" border="0">
+         <tr>
+           %%[ if not empty(@faceBookURL) then ]%%
+           <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@facebookURL)=%%" target="_blank" alias="facebook_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/e2159776-d178-4ed5-b55c-b2345e330f19.png" style="display: block; height: auto;" border="0" width="35" alt="facebook"></a></td>
+           %%[ endif ]%%
+           %%[ if not empty(@twitterURL) then ]%%
+           <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@twitterURL)=%%" target="_blank" alias="twitter_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/271e82ec-a79d-42e0-9410-b8316d577488.png" style="display: block; height: auto;" border="0" width="35" alt="twitter"></a></td>
+           %%[ endif ]%%
+           %%[ if not empty(@instagramURL) then ]%%
+           <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@instagramURL)=%%" target="_blank" alias="instagram_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/b889bfcf-a9a3-4659-86cd-1452a75515d2.png" style="display: block; height: auto;" border="0" width="35" alt="instagram"></a></td>
+           %%[ endif ]%%
+           %%[ if not empty(@pinterestURL) then ]%%
+           <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@pinterestURL)=%%" target="_blank" alias="pinterest_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/4658d392-8f9e-4ebe-a179-5fec45d1f4ed.png" style="display: block; height: auto;" border="0" width="35" alt="pinterest"></a></td>
+           %%[ endif ]%%
+           %%[ if not empty(@youtubeURL) then ]%%
+           <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@youtubeURL)=%%" target="_blank" alias="youtube_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/0ab9da1e-84a1-4fe8-94c7-dc6f3b1b0942.png" style="display: block; height: auto;" border="0" width="35" alt="youtube"></a></td>
+           %%[ endif ]%%
+           %%[ if not empty(@contactEmail) then ]%%
+           <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="mailto:%%=v(@contactEmail)=%%" target="_blank" alias="youtube_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/aee8dd89-b26d-4344-b9d4-7091ef35a40c.png" style="display: block; height: auto;" border="0" width="35" alt="contact"></a></td>
+           %%[ endif ]%%
+         </tr>
+       </table>
+     </td>
+   </tr>
+   <tr>
+     <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px; line-height: 150%;"><strong>%%member_busname%%</strong></td>
+   </tr>
+   <tr>
+     <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px;line-height: 150%;">%%member_addr%%</td>
+   </tr>
+   <tr>
+     <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px;line-height: 150%; padding-bottom: 15px;"><span class="appleLinksWhite">%%member_city%%, %%member_state%% %%member_postalcode%%</span></td>
+   </tr>
+   <tr>
+     <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px;line-height: 150%; padding-bottom: 20px;"><a href="%%=redirectto(@termsURL)=%%" target="_blank" alias="terms_footer" style="color: #ffffff; text-decoration: none;">Terms & Conditions</a> | <a href="%%=redirectto(@privacyURL)=%%" target="_blank" alias="privacy_footer" style="color: #ffffff; text-decoration: none;">Privacy Policy</a> | <a href="%%profile_center_url%%" target="_blank" alias="unsub_footer" style="color: #ffffff; text-decoration: none;">Unsubscribe</a></td>
+   </tr>
+ </table>

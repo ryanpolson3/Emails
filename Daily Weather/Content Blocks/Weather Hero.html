@@ -1,0 +1,30 @@
+<table width="600" class="container" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+  <tr>
+    <td style="padding-bottom: 20px;" class="pad20">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="padding-bottom: 20px;">
+            <a href="%%=redirectto(@storyLink)=%%" target="_blank" alias="%%=concat('Image_Story_',@i)=%%"><img src="%%=v(@storyImage)=%%" style="display: block; border:0; height: auto; max-width: 600px;" width="600" class="image" alt="%%=v(@storyTitle)=%%"></a>
+          </td>
+        </tr>
+          <tr>
+         <td align="center">
+          %%[ set @advertisement = treatascontent(field(@contentRow,'advertisement1')) ]%%
+          %%=contentblockbykey('AdvertisementBlock')=%%
+          </td>
+        </tr>
+          <tr>
+          <td width="100%"> 
+            <!-- Link to Weather page 3546 3504 --> 
+            %%=ContentBlockByID(3504)=%%
+          </td>
+        </tr>
+        <tr>
+          <td style="font-family: Roboto, Arial, sans-serif; color: #555555; font-size: 16px; line-height: 22px; padding-left: 20px; padding-right: 20px;" align="left">
+            %%=v(@storyDescription)=%%
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

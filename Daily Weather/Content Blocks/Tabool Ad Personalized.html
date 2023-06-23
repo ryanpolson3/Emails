@@ -1,0 +1,104 @@
+%%[
+set @hashValue = sha256(_subscriberKey)
+set @taboolaStation = urlencode(@stationURL)
+
+
+IF @personalized_ad_optin =="True" THEN
+
+Set @personalized ="1" ELSE
+Set @personalized ="0" 
+
+ENDIF
+
+
+]%%
+
+<table width="600" cellpadding="0" cellspacing="0" border="0" class="container">
+  <tr>
+      <td class="pad20">
+      <table cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+        <td align="center" style="padding-bottom: 10px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #777777;">ADVERTISEMENT</td></tr>
+      </table>
+      </td>
+  </tr>
+  <tr>
+    <td align="center" style="padding-bottom: 20px;" class="mobile-hidden">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="padding-right: 10px">
+            <table width="135" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td class="mobile-hidden">
+                  <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized))=%%" alias="IMG: Taboola Ad">
+                    <img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized,'&widget.alternative=Desktop')=%%">
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td style="padding-right: 10px; padding-left: 10px;">
+            <table width="135" class="container" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td>
+                  <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized))=%%" alias="IMG: Taboola Ad"><img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized,'&widget.alternative=Desktop')=%%"></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td style="padding-right: 10px; padding-left: 10px;">
+            <table width="135" class="container" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td>
+                  <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized))=%%" alias="IMG: Taboola Ad"><img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized,'&widget.alternative=Desktop')=%%"></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td style="padding-left: 10px;">
+            <table width="135" class="container" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td>
+                  <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized))=%%" alias="IMG: Taboola Ad"><img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized,'&widget.alternative=Desktop')=%%"></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <!--[if !mso]><!-- -->
+    <td align="center" style="padding-bottom: 20px;" class="mobile-only">
+      
+   <div class="mobile-only" style="font-size: 0; max-height: 0; overflow: hidden; display: none">
+
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="padding-left:20px; padding-right: 20px;">
+            <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=1'))=%%" alias="IMG: Taboola Ad"><img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized)=%%"></a>
+          </td>
+        </tr>
+                <tr>
+          <td style="padding-left:20px; padding-right: 20px;">
+            <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=2'))=%%" alias="IMG: Taboola Ad">
+              <img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized)=%%"></a>
+          </td>
+        </tr>
+                <tr>
+          <td style="padding-left:20px; padding-right: 20px;">
+         <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=3'))=%%" alias="IMG: Taboola Ad"><img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized)=%%"></a>
+          </td>
+        </tr>
+                <tr>
+          <td style="padding-left:20px; padding-right: 20px;">
+           <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=4'))=%%" alias="IMG: Taboola Ad"><img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized)=%%"></a>
+          </td>
+        </tr>
+
+            </table>
+      </div>
+          </td>
+         
+    <!--<![endif]-->
+  </tr>
+</table>
