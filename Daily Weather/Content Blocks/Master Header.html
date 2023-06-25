@@ -1,64 +1,76 @@
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-  <tr>
-    <td style="padding-bottom: 20px;">
-      <table class="container" width="600" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-          <td style="font-family: Arial, Helvetica, sans-serif; color: #777777; font-size: 10px; padding-top: 15px;" align="center">
-            Email not displaying correctly? 
-            <a href="%%view_email_url%%" target="_blank" alias="vawp">View the web version</a>.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="container darkBG" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="%%=v(@bgcolor)=%%">
-        <tr>
-          <td style="padding: 20px;">
-            <table width="100%" cellspacing="0" cellpadding="0" border="0">
-              <tr>
-                <td class="drop-center padBot20" align="center">
-                  <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-                    <tr>
-                      <td class="centeredMob" align="left">
-                        <table cellspacing="0" cellpadding="0" border="0" align="left">
-                          <tr>
-                            <td width="100%" align="center">
-                              <a href="%%=redirectto(@stationURL)=%%" target="_blank" alias="logo_image"><img src="%%=v(@logoImage)=%%" style="display: block; height: auto; color: #ffffff" alt="%%=v(@stationName)=%%" width="220" border="0"></a>
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                %%[ if @emailStyle != 'digioh' then ]%%
-                <td class="drop-center centeredMob" align="center">
-                  <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-                    <tr>
-                      <td class="centeredMob" align="right">
-                        <table cellspacing="0" cellpadding="0" border="0" align="right">
-                          <tr>
-                            <td class="darkText" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 16px; line-height: 135%;" width="100%" align="center">
-                              <strong><a href="%%=redirectto(@stationURL)=%%" target="_blank" alias="logo_text" style="color: #ffffff; text-decoration: none;">%%=v(@stationName)=%% %%[ if @emailStyle =='weather' then]%%Weather Update%%[else]%%Trending News%%[endif]%%</a></strong>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="darkText" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px; line-height: 135%;" width="100%" align="center">%%xtmonth%% %%xtday%%, %%xtyear%%
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                %%[ endif ]%%
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+	<tr>
+		<td style="padding-bottom: 20px;">
+			<table class="container" width="600" cellspacing="0" cellpadding="0" border="0">
+				<tr>
+					<td style="font-family: Arial, Helvetica, sans-serif; color: #777777; font-size: 10px; padding-top: 15px;" align="center">
+						Email not displaying correctly?
+						<a href="%%view_email_url%%" target="_blank" alias="vawp">View the web version</a>.
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table class="container darkBG" width="600" cellspacing="0" cellpadding="0" border="0"
+				bgcolor="%%=v(@bgcolor)=%%">
+				<tr>
+					<td style="padding: 20px;">
+						<table width="100%" cellspacing="0" cellpadding="0" border="0">
+							<tr>
+								<td class="drop-center padBot20" align="center">
+									<table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+										<tr>
+											<td class="centeredMob" align="left">
+												<table cellspacing="0" cellpadding="0" border="0" align="left">
+													<tr>
+														<td width="100%" align="center">
+															<a href="%%=redirectto(@stationURL)=%%" target="_blank" alias="logo_image">
+																<img src="%%=v(@logoImage)=%%" style="display: block; height: auto; color: #ffffff" alt="%%=v(@stationName)=%%" width="220" border="0">
+															</a>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+								%%[ if @emailStyle != 'digioh' then ]%%
+								<td class="drop-center centeredMob" align="center">
+									<table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+										<tr>
+											<td class="centeredMob" align="right">
+												<table cellspacing="0" cellpadding="0" border="0" align="right">
+													<tr>
+														<td class="darkText" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 16px; line-height: 135%;" width="100%" align="center">
+															<strong>
+																<a href="%%=redirectto(@stationURL)=%%" target="_blank" alias="logo_text" style="color: #ffffff; text-decoration: none;">
+																	%%=v(@stationName)=%%
+																	%%[ if
+																	@emailStyle =='weather' then]%%Weather
+																	Update%%[else]%%Trending
+																	News%%[endif]%%
+																</a>
+															</strong>
+														</td>
+													</tr>
+													<tr>
+														<td class="darkText" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px; line-height: 135%;" width="100%" align="center">
+															%%xtmonth%% %%xtday%%, %%xtyear%%
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+								%%[ endif ]%%
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
 </table>

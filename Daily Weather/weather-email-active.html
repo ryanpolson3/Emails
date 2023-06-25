@@ -1,752 +1,1564 @@
-%%[ 
-SET @taboolaType ="weather-alert-thumbnails"
-set @mid = memberid
-set @type = 'ACTIVE'
-set @emailStyle = 'weather'
-set @contentRows = lookuprows(concat('ENT.Weather Content Data - ',@type),'mid',@mid)
-set @count = rowcount(@contentRows)
-if @count == 0 then
-  raiseerror('There is no station associated with this MID',0)
+<!-- %%[
+SET @taboolaType = "weather-alert-thumbnails"
+set
+@mid
+=
+memberid
+set
+@type
+=
+'ACTIVE'
+set
+@emailStyle
+=
+'weather'
+set
+@contentRows
+=
+lookuprows(concat('ENT.Weather
+Content
+Data
+-
+',@type),'mid',@mid)
+set
+@count
+=
+rowcount(@contentRows)
+if
+@count
+==
+0
+then
+raiseerror('There
+is
+no
+station
+associated
+with
+this
+MID',0)
 endif
-set @contentRow = row(@contentRows,1)
-set @stationName = field(@contentRow,'stationName')
-set @stationURL = field(@contentRow,'stationURL')
-set @rssFeed = field(@contentRow,'stationRSS')
-set @logoImage = field(@contentRow,'logoImage')
-set @bgColor = field(@contentRow,'backgroundColor')
-set @privacyURL = field(@contentRow,'privacyURL')
-set @termsURL = field(@contentRow,'termsURL')
-set @facebookURL = field(@contentRow,'facebookURL')
-set @twitterURL = field(@contentRow,'twitterURL')
-set @instagramURL = field(@contentRow,'instagramURL')
-set @pinterestURL = field(@contentRow,'pinterestURL')
-set @youtubeURL = field(@contentRow,'youtubeURL')
-set @signupURL = field(@contentRow,'signupURL')
-set @contactEmail = field(@contentRow,'contactEmail')
-set @taboola = field(@contentRow,'taboola')
-set @powerURL = field(@contentRow,'powerURL')
-set @weatherURL = Concat(@stationURL,'weather')
-if @type == 'dev' then
- set @contentType = 'dev'
+set
+@contentRow
+=
+row(@contentRows,1)
+set
+@stationName
+=
+field(@contentRow,'stationName')
+set
+@stationURL
+=
+field(@contentRow,'stationURL')
+set
+@rssFeed
+=
+field(@contentRow,'stationRSS')
+set
+@logoImage
+=
+field(@contentRow,'logoImage')
+set
+@bgColor
+=
+field(@contentRow,'backgroundColor')
+set
+@privacyURL
+=
+field(@contentRow,'privacyURL')
+set
+@termsURL
+=
+field(@contentRow,'termsURL')
+set
+@facebookURL
+=
+field(@contentRow,'facebookURL')
+set
+@twitterURL
+=
+field(@contentRow,'twitterURL')
+set
+@instagramURL
+=
+field(@contentRow,'instagramURL')
+set
+@pinterestURL
+=
+field(@contentRow,'pinterestURL')
+set
+@youtubeURL
+=
+field(@contentRow,'youtubeURL')
+set
+@signupURL
+=
+field(@contentRow,'signupURL')
+set
+@contactEmail
+=
+field(@contentRow,'contactEmail')
+set
+@taboola
+=
+field(@contentRow,'taboola')
+set
+@powerURL
+=
+field(@contentRow,'powerURL')
+set
+@weatherURL
+=
+Concat(@stationURL,'weather')
+if
+@type
+==
+'dev'
+then
+set
+@contentType
+=
+'dev'
 else
- set @contentType = ''
+set
+@contentType
+=
+''
 endif
-set @date = format(now(),'MMMM d, yyyy')
-set @subjectline = concat(@stationName,' weather forecast for ',@date)
-Set @length = Length(@stationName)
-Set @lastLetter = substring(@stationName,@length,1)
-IF @lastLetter =="s"
-THEN 
-SET @stationName = concat(@stationName, "'") 
+set
+@date
+=
+format(now(),'MMMM
+d,
+yyyy')
+set
+@subjectline
+=
+concat(@stationName,'
+weather
+forecast
+for
+',@date)
+Set
+@length
+=
+Length(@stationName)
+Set
+@lastLetter
+=
+substring(@stationName,@length,1)
+IF
+@lastLetter
+=="s"
+THEN
+SET
+@stationName
+=
+concat(@stationName,
+"'")
 ELSE
-SET @stationName = concat(@stationName, "'s") 
+SET
+@stationName
+=
+concat(@stationName,
+"'s")
 ENDIF
-set @xml = lookup(concat('ENT.Weather RSSFeed - ',@type),'RSSFeed','mid',@mid)
-SET @email_address = emailaddr
-SET @rows = LookupRows('ENT.Master Data - MID - ORGID','mid', @mid)
-IF RowCount(@rows) == 1 THEN
-SET @row = Row(@rows,1)
-SET @Master_Data_Name = Field(@row,"Master_Data_Name")
+set
+@xml
+=
+lookup(concat('ENT.Weather
+RSSFeed
+-
+',@type),'RSSFeed','mid',@mid)
+SET
+@email_address
+=
+emailaddr
+SET
+@rows
+=
+LookupRows('ENT.Master
+Data
+-
+MID
+-
+ORGID','mid',
+@mid)
+IF
+RowCount(@rows)
+==
+1
+THEN
+SET
+@row
+=
+Row(@rows,1)
+SET
+@Master_Data_Name
+=
+Field(@row,"Master_Data_Name")
 ENDIF
-SET @rows = LookupRows(concat('ENT.',@Master_Data_Name),"user_uuid", _subscriberkey)
-IF RowCount(@rows) == 1 THEN
-SET @row = Row(@rows,1)
-SET @personalized_ad_optin = Field(@row,"personalized_ad_optin",0)
+SET
+@rows
+=
+LookupRows(concat('ENT.',@Master_Data_Name),"user_uuid",
+_subscriberkey)
+IF
+RowCount(@rows)
+==
+1
+THEN
+SET
+@row
+=
+Row(@rows,1)
+SET
+@personalized_ad_optin
+=
+Field(@row,"personalized_ad_optin",0)
 )
 ENDIF
-IF @personalized_ad_optin =="" OR @personalized_ad_optin is NULL THEN
-SET @personalized_ad_optin ="False"
+IF
+@personalized_ad_optin
+==""
+OR
+@personalized_ad_optin
+is
+NULL
+THEN
+SET
+@personalized_ad_optin
+="False"
 ENDIF
-]%%
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:v="urn:schemas-microsoft-com:vml"
-      xmlns:o="urn:schemas-microsoft-com:office:office">
+]%% -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+	xmlns:o="urn:schemas-microsoft-com:office:office">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!--[if !mso]><!-->
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<!--<![endif]-->
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-<style type="text/css">
- .ReadMsgBody{
-   width: 100%;
- }
- /* Forces Hotmail to display emails at full width */
- .ExternalClass {
-   width: 100%;
- }
- /* Hotmail table centering fix */
- .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
-   line-height: 100%;
- }
- /* Forces Hotmail to display normal line spacing */
- .ExternalClass * {
-   line-height: 100%}
- p {
-   margin: 1em 0;
- }
- /* Yahoo paragraph fix */
- table td {
-   border-collapse: collapse;
- }
- /* This resolves the Outlook 07, 10, and Gmail td padding issue fix */
- /* This resolves the issue when iphone puts links on dates, etc. */
- .appleLinksWhite a {
-   color: #ffffff;
-   text-decoration: none;
- }
- .appleLinksWhiteUL a {
-   color: #ffffff;
-   text-decoration: underline;
- }
- .appleLinksGray a {
-   color: #1f326f;
-   text-decoration: none;
- }
- .appleLinksGray2 a {
-   color: #707070;
-   text-decoration: none;
- }
- .appleLinksBlack a {
-   color: #1d1d1d;
-   text-decoration: none;
- }
- .appleLinksGreen a {
-   color: #1a3c34 !important;
- }
- a.mobileshow, .mobilehide {
-   display: none;
-   color: #fff;
-   /* for Gmail */ }
- .image {
-   width:100% !important;
-   max-width: 100% !important;
-   height: auto !important;
- }
- sup {
-   line-height: 0;
-   font-size: 55%;
- }
- /* APPLE AUTOLINK FIX */
- a[x-apple-data-detectors] {
-   color: inherit !important;
-   text-decoration: none !important;
-   font-size: inherit !important;
-   font-family: inherit !important;
-   font-weight: inherit !important;
-   line-height: inherit !important;
- }
- /* SAMSUNG AUTOLINK FIX */
- #MessageViewBody a {
-   color: inherit;
-   text-decoration: none;
-   font-size: inherit;
-   font-family: inherit;
-   font-weight: inherit;
-   line-height: inherit;
- }
- #container .reco {
-   display: block;
-   width: 300px;
-   font-size: 0;
- }
- /* show the main option */
- #container .reco .body img {
-   width: 100%;
- }
- #container .attribution {
-   font-family: "arial", sans-serif;
-   font-size: 14px;
-   height: 22px;
-   padding-left: 2px;
-   padding-right: 2px;
- }
-</style>
-<style type="text/css"> 
-@media only screen and (max-width: 600px) {
- html,body {
-   width: 100% !important;
-   min-width: 100% !important;
-   margin: 0 auto !important;
- }
- .container {
-   width: 100% !important;
-   min-width: 100% !important;
-   margin: 0 auto !important;
- }
- .header {
-   height: 30px !important;
-   padding-top: 15px !important;
-   padding-bottom: 15px !important;
- }
- .image {
-   width:100% !important;
-   max-width: 100% !important;
-   height: auto !important;
- }
- .drop {
-   width: 100% !important;
-   display: block !important;
- }
- .drop-center {
-   width:100% !important;
-   display:block !important;
-   text-align:center !important;
- }
- .pad20 {
-   padding-left: 20px !important;
-   padding-right: 20px !important;
- }
- .noLeftRightPad {
-   padding-left: 0px !important;
-   padding-right: 0px !important;
- }
- .padBot30 {
-   padding-bottom: 30px !important;
- }
- .headlineFont {
-   font-size: 24px !important;
- }
-}
-</style>
-<style type="text/css"> 
-@media only screen and (max-width: 450px) {
- /* global 450 wide styles */
- body {
-   width: 100% !important;
-   min-width: 100% !important;
-   margin: 0 auto !important;
- }
- .container {
-   width: 100% !important;
-   min-width: 100% !important;
-   margin: 0 auto !important;
- }
- .body {
-   min-width: 100vw;
- }
- .mobile-only {
-   display: block !important;
-   max-height: none !important;
- }
- .mobile-hidden {
-   display: none !important;
- }
- .pad20 {
-   padding-left: 20px !important;
-   padding-right: 20px !important;
- }
- .noLeftRightPad {
-   padding-left: 0px !important;
-   padding-right: 0px !important;
- }
- .padBot20 {
-   padding-bottom: 20px !important;
- }
- .headlineFont {
-   font-size: 24px !important;
- }
- u + .body .gwfw {
-   width: 100% !important;
-   width: 100vw !important;
- }
- #MessageViewBody, #MessageWebViewDiv {
-   min-width:100vw;
-   margin:0 auto !important;
-   zoom:1 !important;
- }
- .centeredMob {
-   text-align: center !important;
-   display: inline-block;
- }
-}
-</style>
-<style type="text/css">
-@media (prefers-color-scheme: dark) {
- .darkBG {
-   background-color: %%=v(@bgcolor)=%% !important;
- }
- .darkText {
-   color: #ffffff !important;
- }
- [data-ogsc] .darkBG {
-   background-color: %%=v(@bgcolor)=%% !important;
- }
- [data-ogsc] .darkText {
-   color: #ffffff !important;
- }
-}
-</style>
-<!--[if gte mso 9]><xml>
-<o:OfficeDocumentSettings>
-<o:AllowPNG/>
-<o:PixelsPerInch>96</o:PixelsPerInch>
-</o:OfficeDocumentSettings>
-</xml><![endif]-->
-<!--[if gte mso 9]>
-<style>
-/* Target Outlook 2007 and 2010 */
-html, body { font-family: Arial, sans-serif !important; }  
-table { font-family: Arial, sans-serif !important; }  
-td { font-family: Arial, sans-serif !important; }
-</style>
-<![endif]-->
-<!--[if gt mso 15]>
-<style type="text/css" media="all">
-/* Outlook 2016 Height Fix */
-table, tr, td {border-collapse: collapse;}
-tr { font-size:0px; line-height:0px; border-collapse: collapse; }
-</style>
-<![endif]-->
-<title>Sinclair Email</title>
+	<meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!--[if !mso]><!-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<!--<![endif]-->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+	<style type="text/css">
+		.ReadMsgBody {
+			width: 100%;
+		}
+
+		/* Forces Hotmail to display emails at full width */
+		.ExternalClass {
+			width: 100%;
+		}
+
+		/* Hotmail table centering fix */
+		.ExternalClass,
+		.ExternalClass p,
+		.ExternalClass span,
+		.ExternalClass font,
+		.ExternalClass td,
+		.ExternalClass div {
+			line-height: 100%;
+		}
+
+		/* Forces Hotmail to display normal line spacing */
+		.ExternalClass * {
+			line-height: 100%;
+		}
+
+		p {
+			margin: 1em 0;
+		}
+
+		/* Yahoo paragraph fix */
+		table td {
+			border-collapse: collapse;
+		}
+
+		/* This resolves the Outlook 07, 10, and Gmail td padding issue fix */
+		/* This resolves the issue when iphone puts links on dates, etc. */
+		.appleLinksWhite a {
+			color: #ffffff;
+			text-decoration: none;
+		}
+
+		.appleLinksWhiteUL a {
+			color: #ffffff;
+			text-decoration: underline;
+		}
+
+		.appleLinksGray a {
+			color: #1f326f;
+			text-decoration: none;
+		}
+
+		.appleLinksGray2 a {
+			color: #707070;
+			text-decoration: none;
+		}
+
+		.appleLinksBlack a {
+			color: #1d1d1d;
+			text-decoration: none;
+		}
+
+		.appleLinksGreen a {
+			color: #1a3c34 !important;
+		}
+
+		a.mobileshow,
+		.mobilehide {
+			display: none;
+			color: #fff;
+			/* for Gmail */
+		}
+
+		.image {
+			width: 100% !important;
+			max-width: 100% !important;
+			height: auto !important;
+		}
+
+		sup {
+			line-height: 0;
+			font-size: 55%;
+		}
+
+		/* APPLE AUTOLINK FIX */
+		a[x-apple-data-detectors] {
+			color: inherit !important;
+			text-decoration: none !important;
+			font-size: inherit !important;
+			font-family: inherit !important;
+			font-weight: inherit !important;
+			line-height: inherit !important;
+		}
+
+		/* SAMSUNG AUTOLINK FIX */
+		#MessageViewBody a {
+			color: inherit;
+			text-decoration: none;
+			font-size: inherit;
+			font-family: inherit;
+			font-weight: inherit;
+			line-height: inherit;
+		}
+
+		#container .reco {
+			display: block;
+			width: 300px;
+			font-size: 0;
+		}
+
+		/* show the main option */
+		#container .reco .body img {
+			width: 100%;
+		}
+
+		#container .attribution {
+			font-family: 'arial',
+				sans-serif;
+			font-size: 14px;
+			height: 22px;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+	</style>
+	<style type="text/css">
+		@media only screen and (max-width: 600px) {
+
+			html,
+			body {
+				width: 100% !important;
+				min-width: 100% !important;
+				margin: 0 auto !important;
+			}
+
+			.container {
+				width: 100% !important;
+				min-width: 100% !important;
+				margin: 0 auto !important;
+			}
+
+			.header {
+				height: 30px !important;
+				padding-top: 15px !important;
+				padding-bottom: 15px !important;
+			}
+
+			.image {
+				width: 100% !important;
+				max-width: 100% !important;
+				height: auto !important;
+			}
+
+			.drop {
+				width: 100% !important;
+				display: block !important;
+			}
+
+			.drop-center {
+				width: 100% !important;
+				display: block !important;
+				text-align: center !important;
+			}
+
+			.pad20 {
+				padding-left: 20px !important;
+				padding-right: 20px !important;
+			}
+
+			.noLeftRightPad {
+				padding-left: 0px !important;
+				padding-right: 0px !important;
+			}
+
+			.padBot30 {
+				padding-bottom: 30px !important;
+			}
+
+			.headlineFont {
+				font-size: 24px !important;
+			}
+		}
+	</style>
+	<style type="text/css">
+		@media only screen and (max-width: 450px) {
+
+			/* global 450 wide styles */
+			body {
+				width: 100% !important;
+				min-width: 100% !important;
+				margin: 0 auto !important;
+			}
+
+			.container {
+				width: 100% !important;
+				min-width: 100% !important;
+				margin: 0 auto !important;
+			}
+
+			.body {
+				min-width: 100vw;
+			}
+
+			.mobile-only {
+				display: block !important;
+				max-height: none !important;
+			}
+
+			.mobile-hidden {
+				display: none !important;
+			}
+
+			.pad20 {
+				padding-left: 20px !important;
+				padding-right: 20px !important;
+			}
+
+			.noLeftRightPad {
+				padding-left: 0px !important;
+				padding-right: 0px !important;
+			}
+
+			.padBot20 {
+				padding-bottom: 20px !important;
+			}
+
+			.headlineFont {
+				font-size: 24px !important;
+			}
+
+			u+.body .gwfw {
+				width: 100% !important;
+				width: 100vw !important;
+			}
+
+			#MessageViewBody,
+			#MessageWebViewDiv {
+				min-width: 100vw;
+				margin: 0 auto !important;
+				zoom: 1 !important;
+			}
+
+			.centeredMob {
+				text-align: center !important;
+				display: inline-block;
+			}
+		}
+	</style>
+	<style type="text/css">
+		@media (prefers-color-scheme: dark) {
+			.darkBG {
+				background-color: %%=v(@bgcolor)=%% !important;
+			}
+
+			.darkText {
+				color: #ffffff !important;
+			}
+
+			[data-ogsc] .darkBG {
+				background-color: %%=v(@bgcolor)=%% !important;
+			}
+
+			[data-ogsc] .darkText {
+				color: #ffffff !important;
+			}
+		}
+	</style>
+	<!--[if gte mso 9
+			]><xml>
+				<o:OfficeDocumentSettings>
+					<o:AllowPNG />
+					<o:PixelsPerInch
+						>96</o:PixelsPerInch
+					>
+				</o:OfficeDocumentSettings>
+			</xml><!
+		[endif]-->
+	<!--[if gte mso 9]>
+			<style>
+				/* Target Outlook 2007 and 2010 */
+				html,
+				body {
+					font-family: Arial,
+						sans-serif !important;
+				}
+				table {
+					font-family: Arial,
+						sans-serif !important;
+				}
+				td {
+					font-family: Arial,
+						sans-serif !important;
+				}
+			</style>
+		<![endif]-->
+	<!--[if gt mso 15]>
+			<style
+				type="text/css"
+				media="all"
+			>
+				/* Outlook 2016 Height Fix */
+				table,
+				tr,
+				td {
+					border-collapse: collapse;
+				}
+				tr {
+					font-size: 0px;
+					line-height: 0px;
+					border-collapse: collapse;
+				}
+			</style>
+		<![endif]-->
+	<title>
+		Sinclair
+		Email
+	</title>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="width:100% !important;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;background-color:#ffffff;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;" class="body">
-<custom name="opencounter" type="tracking"/>
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="gwfw">
- <tr>
-  <td align="center">
-   <table align="center" border="0" cellpadding="0" cellspacing="0" class="container" style="font-family: Arial, Helvetica, sans-serif;" width="600">
-    <tr>
-     <td>
-      <table cellpadding="0" cellspacing="0" border="0" width="100%">
-       <tr>
-        <td align="center" valign="top">
-          <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr>
-              <td style="border:0px;">
-               <table border="0" cellspacing="0" cellpadding="0" width="100%">
-                <tr>
-                 <td align="left" valign="top">
-                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                   <tr>
-                    <td width="100%">
-                     <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                      <tr>
-                       <!--  style="padding-bottom: 20px;" was removed from the td below -->
-                       <td align="center">
-                        <!-- Master Header -->
-                        <!-- %%=contentblockbykey(concat('MasterHeader',@contentType))=%% -->
-                        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                         <tr>
-                          <td style="padding-bottom: 20px;">
-                           <table class="container" width="600" cellspacing="0" cellpadding="0" border="0">
-                            <tr>
-                             <td style="font-family: Arial, Helvetica, sans-serif; color: #777777; font-size: 10px; padding-top: 15px;" align="center">
-                              Email not displaying correctly? 
-                              <a href="%%view_email_url%%" target="_blank" alias="vawp">View the web version</a>.
-                             </td>
-                            </tr>
-                           </table>
-                          </td>
-                         </tr>
-                         <tr>
-                          <td>
-                           <table class="container darkBG" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="%%=v(@bgcolor)=%%">
-                            <tr>
-                             <td style="padding: 20px;">
-                              <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                               <tr>
-                                <td class="drop-center padBot20" align="center">
-                                 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-                                  <tr>
-                                   <td class="centeredMob" align="left">
-                                    <table cellspacing="0" cellpadding="0" border="0" align="left">
-                                     <tr>
-                                      <td width="100%" align="center">
-                                       <a href="%%=redirectto(@stationURL)=%%" target="_blank" alias="logo_image">
-                                        <img src="%%=v(@logoImage)=%%" style="display: block; height: auto; color: #ffffff" alt="%%=v(@stationName)=%%" width="220" border="0">
-                                       </a>
-                                      </td>
-                                     </tr>
-                                    </table>
-                                   </td>
-                                  </tr>
-                                 </table>
-                                </td>
-                                %%[ if @emailStyle != 'digioh' then ]%%
-                                <td class="drop-center centeredMob" align="center">
-                                 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-                                  <tr>
-                                   <td class="centeredMob" align="right">
-                                    <table cellspacing="0" cellpadding="0" border="0" align="right">
-                                     <tr>
-                                      <td class="darkText" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 16px; line-height: 135%;" width="100%" align="center">
-                                       <strong>
-                                        <a href="%%=redirectto(@stationURL)=%%" target="_blank" alias="logo_text" style="color: #ffffff; text-decoration: none;">
-                                         %%=v(@stationName)=%% 
-                                         %%[ if @emailStyle =='weather' then]%%
 
-                                         Weather Update
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="
+			width: 100% !important;
+			-webkit-text-size-adjust: none;
+			-ms-text-size-adjust: none;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-right: 0;
+			margin-left: 0;
+			padding-top: 0;
+			padding-bottom: 0;
+			padding-right: 0;
+			padding-left: 0;
+			background-color: #ffffff;
+			background-image: none;
+			background-repeat: repeat;
+			background-position: top
+				left;
+			background-attachment: scroll;
+		" class="body">
+	<custom name="opencounter" type="tracking" />
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="gwfw">
+		<tr>
+			<td align="center">
+				<table align="center" border="0" cellpadding="0" cellspacing="0" class="container" style="
+							font-family: Arial,
+								Helvetica,
+								sans-serif;
+						" width="600">
+					<tr>
+						<td>
+							<table cellpadding="0" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td align="center" valign="top">
+										<table align="left" border="0" cellpadding="0" cellspacing="0" width="100%">
+											<tr>
+												<td style="
+															border: 0px;
+														">
+													<table border="0" cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td align="left" valign="top">
+																<table width="100%" cellpadding="0" cellspacing="0" border="0">
+																	<tr>
+																		<td width="100%">
+																			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+																				<tr>
+																					<!--  style="padding-bottom: 20px;" was removed from the td below -->
+																					<td align="center">
+																						<!-- Master Header -->
+																						<!-- %%=contentblockbykey(concat('MasterHeader',@contentType))=%% -->
+																						<table width="100%" cellspacing="0" cellpadding="0"
+																							border="0">
+																							<tr>
+																								<td style="
+																											padding-bottom: 20px;
+																										">
+																									<table class="container" width="600"
+																										cellspacing="0" cellpadding="0"
+																										border="0">
+																										<tr>
+																											<td style="
+																														font-family: Arial,
+																															Helvetica,
+																															sans-serif;
+																														color: #777777;
+																														font-size: 10px;
+																														padding-top: 15px;
+																													" align="center">
+																												Email
+																												not
+																												displaying
+																												correctly?
+																												<a href="%%view_email_url%%"
+																													target="_blank" alias="vawp">View
+																													the
+																													web
+																													version</a>.
+																											</td>
+																										</tr>
+																									</table>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<table class="container darkBG" width="600"
+																										cellspacing="0" cellpadding="0" border="0"
+																										bgcolor="%%=v(@bgcolor)=%%">
+																										<tr>
+																											<td style="
+																														padding: 20px;
+																													">
+																												<table width="100%" cellspacing="0"
+																													cellpadding="0" border="0">
+																													<tr>
+																														<td class="drop-center padBot20"
+																															align="center">
+																															<table width="100%"
+																																cellspacing="0"
+																																cellpadding="0"
+																																border="0"
+																																align="center">
+																																<tr>
+																																	<td class="centeredMob"
+																																		align="left">
+																																		<table
+																																			cellspacing="0"
+																																			cellpadding="0"
+																																			border="0"
+																																			align="left">
+																																			<tr>
+																																				<td width="100%"
+																																					align="center">
+																																					<a href="%%=redirectto(@stationURL)=%%"
+																																						target="_blank"
+																																						alias="logo_image">
+																																						<img
+																																							src="%%=v(@logoImage)=%%"
+																																							style="
+																																									display: block;
+																																									height: auto;
+																																									color: #ffffff;
+																																								" alt="%%=v(@stationName)=%%" width="220" border="0" />
+																																					</a>
+																																				</td>
+																																			</tr>
+																																		</table>
+																																	</td>
+																																</tr>
+																															</table>
+																														</td>
+																														%%[
+																														if
+																														@emailStyle
+																														!=
+																														'digioh'
+																														then
+																														]%%
+																														<td class="drop-center centeredMob"
+																															align="center">
+																															<table width="100%"
+																																cellspacing="0"
+																																cellpadding="0"
+																																border="0"
+																																align="center">
+																																<tr>
+																																	<td class="centeredMob"
+																																		align="right">
+																																		<table
+																																			cellspacing="0"
+																																			cellpadding="0"
+																																			border="0"
+																																			align="right">
+																																			<tr>
+																																				<td class="darkText"
+																																					style="
+																																							font-family: Arial,
+																																								Helvetica,
+																																								sans-serif;
+																																							color: #ffffff;
+																																							font-size: 16px;
+																																							line-height: 135%;
+																																						" width="100%" align="center">
+																																					<strong>
+																																						<a href="%%=redirectto(@stationURL)=%%"
+																																							target="_blank"
+																																							alias="logo_text"
+																																							style="
+																																									color: #ffffff;
+																																									text-decoration: none;
+																																								">
+																																							%%=v(@stationName)=%%
+																																							%%[
+																																							if
+																																							@emailStyle
+																																							=='weather'
+																																							then]%%
+																																							Weather
+																																							Update
+																																							%%[else]%%
+																																							Trending
+																																							News
+																																							%%[endif]%%
+																																						</a>
+																																					</strong>
+																																				</td>
+																																			</tr>
 
-                                         %%[else]%%
+																																			<tr>
+																																				<td class="darkText"
+																																					style="
+																																							font-family: Arial,
+																																								Helvetica,
+																																								sans-serif;
+																																							color: #ffffff;
+																																							font-size: 14px;
+																																							line-height: 135%;
+																																						" width="100%" align="center">
+																																					%%xtmonth%%
+																																					%%xtday%%,
+																																					%%xtyear%%
+																																				</td>
+																																			</tr>
+																																		</table>
+																																	</td>
+																																</tr>
+																															</table>
+																														</td>
+																														%%[
+																														endif
+																														]%%
+																													</tr>
+																												</table>
+																											</td>
+																										</tr>
+																									</table>
+																								</td>
+																							</tr>
+																						</table>
+																					</td>
+																				</tr>
+																				<!-- Sponsor Logo Start -->
+																				<tr>
+																					<td>
+																						<!-- Sponsor Logo Image only -->
+																						%%[
+																						set
+																						@sponsor
+																						=
+																						treatascontent(field(@contentRow,'sponsorWeather'))
+																						]%%
+																						<!-- CB: SponsorLogoAMPScript -->
+																						%%=ContentBlockByID("6454")=%%
+																						<!-- CB: SponsorLogoImage -->
+																						%%=ContentBlockByID("5636")=%%
+																					</td>
+																				</tr>
+																				<!-- Sponsor Logo End -->
+																				<tr>
+																					<td>
+																						<table cellpadding="0" cellspacing="0" border="0"
+																							width="100%">
+																							%%[
+																							/*
+																							parse
+																							XML
+																							payload
+																							*/
+																							set
+																							@title
+																							=
+																							buildRowSetFromXML(@xml,concat('//channel/item[',1,']/title'),1)
+																							if
+																							rowcount(@title)
+																							>
+																							0
+																							then
+																							set
+																							@row
+																							=
+																							row(@title,1)
+																							set
+																							@storyTitle
+																							=
+																							field(@row,'value')
+																							endif
+																							set
+																							@description
+																							=
+																							buildRowSetFromXML(@xml,concat('//channel/item[',1,']/description'),1)
+																							if
+																							rowcount(@description)
+																							>
+																							0
+																							then
+																							set
+																							@row
+																							=
+																							row(@description,1)
+																							set
+																							@storyDescription
+																							=
+																							field(@row,'value')
+																							endif
+																							set
+																							@link
+																							=
+																							buildRowSetFromXML(@xml,concat('//channel/item[',1,']/link'),1)
+																							if
+																							rowcount(@link)
+																							>
+																							0
+																							then
+																							set
+																							@row
+																							=
+																							row(@link,1)
+																							set
+																							@storylink
+																							=
+																							field(@row,'value')
+																							endif
+																							set
+																							@image
+																							=
+																							buildRowSetFromXML(@xml,concat('//channel/item[',1,']/enclosure'),1)
+																							if
+																							rowcount(@image)
+																							>
+																							0
+																							then
+																							set
+																							@row
+																							=
+																							row(@image,1)
+																							set
+																							@storyimage
+																							=
+																							field(@row,'url_att')
+																							endif
+																							]%%
+																							<tr>
+																								<td>
+																									<!-- CB-Active: Weather Hero -->
+																									<!-- %%=contentblockbykey(concat('WeatherHero',@contentType))=%% -->
+																									<table width="600" class="container"
+																										cellpadding="0" cellspacing="0" border="0"
+																										bgcolor="#ffffff">
+																										<tr>
+																											<td style="
+																														padding-bottom: 20px;
+																													" class="pad20">
+																												<table width="100%" cellpadding="0"
+																													cellspacing="0" border="0">
+																													<tr>
+																														<td style="
+																																	padding-bottom: 20px;
+																																">
+																															<a href="%%=redirectto(@storyLink)=%%"
+																																target="_blank"
+																																alias="%%=concat('Image_Story_',@i)=%%"><img
+																																	src="%%=v(@storyImage)=%%"
+																																	style="
+																																			display: block;
+																																			border: 0;
+																																			height: auto;
+																																			max-width: 600px;
+																																		" width="600" class="image" alt="%%=v(@storyTitle)=%%" /></a>
+																														</td>
+																													</tr>
+																													<tr>
+																														<td align="center">
+																															%%[
+																															set
+																															@advertisement
+																															=
+																															treatascontent(field(@contentRow,'advertisement1'))
+																															]%%
+																															<!-- %%=contentblockbykey('AdvertisementBlock')=%% -->
+																															<table width="600"
+																																class="container"
+																																cellpadding="0"
+																																cellspacing="0"
+																																border="0">
+																																<tr>
+																																	<td class="pad20">
+																																		<table
+																																			cellspacing="0"
+																																			cellpadding="0"
+																																			border="0"
+																																			width="100%">
+																																			<tr>
+																																				<td align="center"
+																																					style="
+																																							padding-bottom: 10px;
+																																							font-family: Arial,
+																																								Helvetica,
+																																								sans-serif;
+																																							font-size: 12px;
+																																							color: #777777;
+																																						">
+																																					ADVERTISEMENT
+																																				</td>
+																																			</tr>
+																																		</table>
+																																	</td>
+																																</tr>
+																																<tr>
+																																	<td style="
+																																				padding-bottom: 20px;
+																																			" class="pad20">
+																																		<!-- POWERINBOX 970x250 ; added d to below variable that was avertisement -->
+																																		<div
+																																			class="pi_%%=v(@advertisement)=%% powerinbox">
+																																			<!-- domain: %%=v(@powerURL)=%% -->
+																																			<!--[if (gte mso 9)|(IE)]><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td><![endif]-->
+																																			<table
+																																				width="600"
+																																				align="center"
+																																				border="0"
+																																				cellpadding="0"
+																																				cellspacing="0"
+																																				style="
+																																						width: 100%;
+																																						max-width: 600px;
+																																					">
+																																				<tr>
+																																					<td
+																																						align="center">
+																																						<a href="%%=redirectto(concat('https://rs-stripe.',@powerURL,'/stripe/redirect?cs_stripeid=',@advertisement,'&cs_offset=0&cs_email=',_subscriberkey,'&cs_sendid=',jobID,'&cs_esp=salesforcemarketing&dfp_senddate={PLACEHOLDER1}&dfp_SSO={true,false,null}'))=%%"
+																																							style="
+																																									border-style: none;
+																																									outline: none;
+																																									text-decoration: none;
+																																								" target="_blank" rel="nofollow noopener" alias="IMG: Ad"><img alt="" height="auto"
+																																								src="%%=concat('https://rs-stripe.',@powerURL,'/stripe/image?cs_stripeid=',@advertisement,'&cs_offset=0&cs_email=',_subscriberkey,'&cs_sendid=',jobID,'&cs_esp=salesforcemarketing&dfp_senddate={PLACEHOLDER1}&dfp_SSO={true,false,null}')=%%"
+																																								style="
+																																										display: block;
+																																										border: 0;
+																																										height: auto;
+																																										line-height: 100%;
+																																										outline: none;
+																																										text-decoration: none;
+																																										width: 100%;
+																																										max-width: 600px;
+																																									" width="600" /></a>
+																																					</td>
+																																				</tr>
+																																			</table>
+																																			<table
+																																				width="600"
+																																				align="center"
+																																				border="0"
+																																				cellpadding="0"
+																																				cellspacing="0"
+																																				style="
+																																						width: 100%;
+																																						max-width: 600px;
+																																					">
+																																				<tr>
+																																					<td align="center"
+																																						height="3"
+																																						valign="top"
+																																						style="
+																																								font-size: 3px;
+																																								height: 3px;
+																																								line-height: 3px;
+																																								vertical-align: top;
+																																							">
+																																						&nbsp;
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td
+																																						align="right">
+																																						<a href="%%=redirectto(concat('https://rs-stripe.',@powerURL,'/branding/?utm_source=contentstripe&utm_campaign=rs_',@advertisement,'&utm_medium=email&utm_content=logo&rs_type=dfp'))=%%"
+																																							style="
+																																									display: inline-block;
+																																									border: 0;
+																																									outline: none;
+																																									text-decoration: none;
+																																								" target="_blank" rel="nofollow noopener" alias="LNK: Ad"><img src="%%=concat('https://rs-stripe.',@powerURL,'/branding/recommend/powerinbox-rec-reg.png')=%%"
+																																								width="154"
+																																								height="15"
+																																								border="0"
+																																								alt="Learn more about RevenueStripe..." /></a>
+																																					</td>
+																																				</tr>
+																																			</table>
+																																			<!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+																																		</div>
+																																		<!-- POWERINBOX 970x250 -->
+																																	</td>
+																																</tr>
+																															</table>
+																														</td>
+																													</tr>
+																													<tr>
+																														<td width="100%">
+																															<!-- Link to Weather page 3546 3504 -->
+																															<!-- %%=ContentBlockByID(3504)=%% -->
+																															Local
+																															Weather
+																															and
+																															Forecast
+																														</td>
+																													</tr>
+																													<tr>
+																														<td style="
+																																	font-family: Roboto,
+																																		Arial,
+																																		sans-serif;
+																																	color: #555555;
+																																	font-size: 16px;
+																																	line-height: 22px;
+																																	padding-left: 20px;
+																																	padding-right: 20px;
+																																" align="left">
+																															%%=v(@storyDescription)=%%
+																														</td>
+																													</tr>
+																												</table>
+																											</td>
+																										</tr>
+																									</table>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td width="100%">
+																									<!-- Link to Weather page set @xml = substring(@xml,2,200) 3546 3504 -->
+																									%%=ContentBlockByID(3546)=%%
+																								</td>
+																							</tr>
+																						</table>
+																					</td>
+																				</tr>
+																				<tr>
+																					<td align="center">
+																						<!-- %%=contentblockbykey(concat('TaboolaAdPersonalized',@contentType))=%% -->
+																						%%[
+																						set
+																						@hashValue
+																						=
+																						sha256(_subscriberKey)
+																						set
+																						@taboolaStation
+																						=
+																						urlencode(@stationURL)
+																						IF
+																						@personalized_ad_optin
+																						=="True"
+																						THEN
+																						Set
+																						@personalized
+																						="1"
+																						ELSE
+																						Set
+																						@personalized
+																						="0"
+																						ENDIF
+																						]%%
 
-                                         Trending News
-
-                                         %%[endif]%%
-                                        </a>
-                                       </strong>
-                                      </td>
-                                     </tr>
-                                     <tr>
-                                      <td class="darkText" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px; line-height: 135%;" width="100%" align="center">
-                                       %%xtmonth%% %%xtday%%, %%xtyear%%
-                                      </td>
-                                     </tr>
-                                    </table>
-                                   </td>
-                                  </tr>
-                                 </table>
-                                </td>
-                                %%[ endif ]%%
-                               </tr>
-                              </table>
-                             </td>
-                            </tr>
-                           </table>
-                          </td>
-                         </tr>
-                       </table>                       
-                       </td>
-                      </tr>
-                      <!-- Sponsor Logo Start -->
-                      <tr>
-                       <td>
-                        <!-- Sponsor Logo Image only -->
-                        %%[ set @sponsor = treatascontent(field(@contentRow,'sponsorWeather')) ]%%
-                        <!-- CB: SponsorLogoAMPScript -->
-                        %%=ContentBlockByID("6454")=%%
-                        <!-- CB: SponsorLogoImage -->
-                        %%=ContentBlockByID("5636")=%%
-                       </td>
-                      </tr>
-                      <!-- Sponsor Logo End -->
-                      <tr>
-                       <td>
-                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                        %%[
-                          /* parse XML payload */
-                            set @title = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/title'),1)
-                            if rowcount(@title) > 0 then
-                              set @row = row(@title,1)
-                              set @storyTitle = field(@row,'value')
-                            endif
-                            set @description = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/description'),1)
-                            if rowcount(@description) > 0 then
-                              set @row = row(@description,1)
-                              set @storyDescription = field(@row,'value')
-                            endif
-                            set @link = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/link'),1)
-                            if rowcount(@link) > 0 then
-                              set @row = row(@link,1)
-                              set @storylink = field(@row,'value')
-                            endif
-                            set @image = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/enclosure'),1)
-                            if rowcount(@image) > 0 then
-                              set @row = row(@image,1)
-                              set @storyimage = field(@row,'url_att')
-                            endif
-                          ]%%
-                          <tr>
-                           <td>
-                            <!-- CB-Active: Weather Hero -->
-                            <!-- %%=contentblockbykey(concat('WeatherHero',@contentType))=%% -->
-                            <table width="600" class="container" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
-                             <tr>
-                              <td style="padding-bottom: 20px;" class="pad20">
-                               <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                 <td style="padding-bottom: 20px;">
-                                  <a href="%%=redirectto(@storyLink)=%%" target="_blank" alias="%%=concat('Image_Story_',@i)=%%"><img src="%%=v(@storyImage)=%%" style="display: block; border:0; height: auto; max-width: 600px;" width="600" class="image" alt="%%=v(@storyTitle)=%%"></a>
-                                 </td>
-                                </tr>
-                                <tr>
-                                 <td align="center">
-                                  %%[ set @advertisement = treatascontent(field(@contentRow,'advertisement1')) ]%%
-                                  <!-- %%=contentblockbykey('AdvertisementBlock')=%% -->
-                                  <table width="600" class="container" cellpadding="0" cellspacing="0" border="0">
-                                   <tr>
-                                    <td class="pad20">
-                                      <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                                        <tr>
-                                          <td align="center" style="padding-bottom: 10px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #777777;">
-                                            ADVERTISEMENT
-                                          </td>
-                                        </tr>
-                                      </table>
-                                    </td>
-                                   </tr>
-                                   <tr>
-                                    <td style="padding-bottom: 20px;" class="pad20">
-                                      <!-- POWERINBOX 970x250 ; added d to below variable that was avertisement -->
-                                      <div class="pi_%%=v(@advertisement)=%% powerinbox">
-                                        <!-- domain: %%=v(@powerURL)=%% -->
-                                        <!--[if (gte mso 9)|(IE)]><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td><![endif]-->
-                                        <table width="600" align="center" border="0" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px;">
-                                          <tr>
-                                            <td align="center">
-                                              <a href="%%=redirectto(concat('https://rs-stripe.',@powerURL,'/stripe/redirect?cs_stripeid=',@advertisement,'&cs_offset=0&cs_email=',_subscriberkey,'&cs_sendid=',jobID,'&cs_esp=salesforcemarketing&dfp_senddate={PLACEHOLDER1}&dfp_SSO={true,false,null}'))=%%" style="border-style: none; outline: none; text-decoration: none;" target="_blank" rel="nofollow noopener" alias="IMG: Ad"><img alt="" height="auto" src="%%=concat('https://rs-stripe.',@powerURL,'/stripe/image?cs_stripeid=',@advertisement,'&cs_offset=0&cs_email=',_subscriberkey,'&cs_sendid=',jobID,'&cs_esp=salesforcemarketing&dfp_senddate={PLACEHOLDER1}&dfp_SSO={true,false,null}')=%%" style="display: block; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; width: 100%; max-width: 600px;" width="600"></a>
-                                            </td>
-                                          </tr>
-                                        </table>
-                                        <table width="600" align="center" border="0" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px;">
-                                            <tr>
-                                              <td align="center" height="3" valign="top" style="font-size: 3px; height: 3px; line-height: 3px; vertical-align: top;">
-                                                &nbsp;
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td align="right">
-                                                <a href="%%=redirectto(concat('https://rs-stripe.',@powerURL,'/branding/?utm_source=contentstripe&utm_campaign=rs_',@advertisement,'&utm_medium=email&utm_content=logo&rs_type=dfp'))=%%" style="display: inline-block; border: 0; outline: none; text-decoration: none;" target="_blank" rel="nofollow noopener" alias="LNK: Ad"><img src="%%=concat('https://rs-stripe.',@powerURL,'/branding/recommend/powerinbox-rec-reg.png')=%%" width="154" height="15" border="0" alt="Learn more about RevenueStripe..."></a>
-                                              </td>
-                                            </tr>
-                                        </table>
-                                        <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
-                                      </div>
-                                      <!-- POWERINBOX 970x250 -->
-                                     </td>
-                                   </tr>
-                                 </table>
-                                 </td>
-                                </tr>
-                                <tr>
-                                 <td width="100%"> 
-                                   <!-- Link to Weather page 3546 3504 --> 
-                                   <!-- %%=ContentBlockByID(3504)=%% -->
-                                   Local Weather and Forecast
-                                 </td>
-                                </tr>
-                                <tr>
-                                 <td style="font-family: Roboto, Arial, sans-serif; color: #555555; font-size: 16px; line-height: 22px; padding-left: 20px; padding-right: 20px;" align="left">
-                                  %%=v(@storyDescription)=%%
-                                 </td>
-                                </tr>
-                               </table>
-                              </td>
-                             </tr>
-                            </table>
-                           </td>
-                          </tr>
-                          <tr>
-                           <td width="100%"> 
-                            <!-- Link to Weather page set @xml = substring(@xml,2,200) 3546 3504 --> 
-                            %%=ContentBlockByID(3546)=%%
-                           </td>
-                          </tr>
-                        </table>
-                       </td>
-                      </tr>
-                      <tr>
-                        <td align="center">
-                          <!-- %%=contentblockbykey(concat('TaboolaAdPersonalized',@contentType))=%% -->
-                          %%[
-                          set @hashValue = sha256(_subscriberKey)
-                          set @taboolaStation = urlencode(@stationURL)
-
-
-                          IF @personalized_ad_optin =="True" THEN
-
-                          Set @personalized ="1" ELSE
-                          Set @personalized ="0" 
-
-                          ENDIF
-
-
-                          ]%%
-
-                          <table width="600" cellpadding="0" cellspacing="0" border="0" class="container">
-                            <tr>
-                              <td class="pad20">
-                                <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                                  <tr>
-                                    <td align="center" style="padding-bottom: 10px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #777777;">
-                                      ADVERTISEMENT
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td align="center" style="padding-bottom: 20px;" class="mobile-hidden">
-                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                  <tr>
-                                    <td style="padding-right: 10px">
-                                      <table width="135" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                          <td class="mobile-hidden">
-                                            <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized))=%%" alias="IMG: Taboola Ad">
-                                              <img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized,'&widget.alternative=Desktop')=%%">
-                                            </a>
-                                          </td>
-                                        </tr>
-                                      </table>
-                                    </td>
-                                    <td style="padding-right: 10px; padding-left: 10px;">
-                                      <table width="135" class="container" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                          <td>
-                                            <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized))=%%" alias="IMG: Taboola Ad">
-                                              <img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized,'&widget.alternative=Desktop')=%%">
-                                            </a>
-                                          </td>
-                                        </tr>
-                                      </table>
-                                    </td>
-                                    <td style="padding-right: 10px; padding-left: 10px;">
-                                      <table width="135" class="container" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                          <td>
-                                            <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized))=%%" alias="IMG: Taboola Ad">
-                                              <img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized,'&widget.alternative=Desktop')=%%">
-                                            </a>
-                                          </td>
-                                        </tr>
-                                      </table>
-                                    </td>
-                                    <td style="padding-left: 10px;">
-                                      <table width="135" class="container" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                          <td>
-                                            <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized))=%%" alias="IMG: Taboola Ad">
-                                              <img width="135" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized,'&widget.alternative=Desktop')=%%">
-                                            </a>
-                                          </td>
-                                        </tr>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                              <!--[if !mso]><!-- -->
-                              <td align="center" style="padding-bottom: 20px;" class="mobile-only">
-                                <div class="mobile-only" style="font-size: 0; max-height: 0; overflow: hidden; display: none">
-                                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                    <tr>
-                                      <td style="padding-left:20px; padding-right: 20px;">
-                                        <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=1'))=%%" alias="IMG: Taboola Ad">
-                                          <img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized)=%%">
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td style="padding-left:20px; padding-right: 20px;">
-                                        <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=2'))=%%" alias="IMG: Taboola Ad">
-                                          <img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized)=%%">
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td style="padding-left:20px; padding-right: 20px;">
-                                        <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=3'))=%%" alias="IMG: Taboola Ad">
-                                          <img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized)=%%">
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td style="padding-left:20px; padding-right: 20px;">
-                                        <a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=4'))=%%" alias="IMG: Taboola Ad">
-                                          <img width="100%" class="image" src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized)=%%">
-                                        </a>
-                                      </td>
-                                    </tr>
-                                  </table>
-                                </div>
-                              </td>
-                              <!--<![endif]-->
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>                
-                      <tr>
-                       <td align="center">
-                        <!-- %%=contentblockbykey(concat('MasterFooter',@contentType))=%% -->
-                        <table width="600" class="container darkBG" cellpadding="0" cellspacing="0" border="0" bgcolor="%%=v(@bgcolor)=%%">
-                         <tr>
-                           <td align="center" style="padding-top: 20px; padding-bottom: 20px;">
-                             <table cellpadding="0" cellspacing="0" border="0">
-                               <tr>
-                                 %%[ if not empty(@faceBookURL) then ]%%
-                                 <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@facebookURL)=%%" target="_blank" alias="facebook_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/e2159776-d178-4ed5-b55c-b2345e330f19.png" style="display: block; height: auto;" border="0" width="35" alt="facebook"></a></td>
-                                 %%[ endif ]%%
-                                 %%[ if not empty(@twitterURL) then ]%%
-                                 <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@twitterURL)=%%" target="_blank" alias="twitter_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/271e82ec-a79d-42e0-9410-b8316d577488.png" style="display: block; height: auto;" border="0" width="35" alt="twitter"></a></td>
-                                 %%[ endif ]%%
-                                 %%[ if not empty(@instagramURL) then ]%%
-                                 <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@instagramURL)=%%" target="_blank" alias="instagram_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/b889bfcf-a9a3-4659-86cd-1452a75515d2.png" style="display: block; height: auto;" border="0" width="35" alt="instagram"></a></td>
-                                 %%[ endif ]%%
-                                 %%[ if not empty(@pinterestURL) then ]%%
-                                 <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@pinterestURL)=%%" target="_blank" alias="pinterest_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/4658d392-8f9e-4ebe-a179-5fec45d1f4ed.png" style="display: block; height: auto;" border="0" width="35" alt="pinterest"></a></td>
-                                 %%[ endif ]%%
-                                 %%[ if not empty(@youtubeURL) then ]%%
-                                 <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="%%=redirectto(@youtubeURL)=%%" target="_blank" alias="youtube_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/0ab9da1e-84a1-4fe8-94c7-dc6f3b1b0942.png" style="display: block; height: auto;" border="0" width="35" alt="youtube"></a></td>
-                                 %%[ endif ]%%
-                                 %%[ if not empty(@contactEmail) then ]%%
-                                 <td align="center" style="padding-left: 5px; padding-right: 5px;"><a href="mailto:%%=v(@contactEmail)=%%" target="_blank" alias="youtube_footer"><img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/aee8dd89-b26d-4344-b9d4-7091ef35a40c.png" style="display: block; height: auto;" border="0" width="35" alt="contact"></a></td>
-                                 %%[ endif ]%%
-                               </tr>
-                             </table>
-                           </td>
-                         </tr>
-                         <tr>
-                           <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px; line-height: 150%;"><strong>%%member_busname%%</strong></td>
-                         </tr>
-                         <tr>
-                           <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px;line-height: 150%;">%%member_addr%%</td>
-                         </tr>
-                         <tr>
-                           <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px;line-height: 150%; padding-bottom: 15px;"><span class="appleLinksWhite">%%member_city%%, %%member_state%% %%member_postalcode%%</span></td>
-                         </tr>
-                         <tr>
-                           <td class="darkText" align="center" style="font-family: Arial, Helvetica, sans-serif; color: #ffffff; font-size: 14px;line-height: 150%; padding-bottom: 20px;"><a href="%%=redirectto(@termsURL)=%%" target="_blank" alias="terms_footer" style="color: #ffffff; text-decoration: none;">Terms & Conditions</a> | <a href="%%=redirectto(@privacyURL)=%%" target="_blank" alias="privacy_footer" style="color: #ffffff; text-decoration: none;">Privacy Policy</a> | <a href="%%profile_center_url%%" target="_blank" alias="unsub_footer" style="color: #ffffff; text-decoration: none;">Unsubscribe</a></td>
-                         </tr>
-                       </table>
-                       </td>
-                      </tr>
-                     </table>
-                    </td>
-                   </tr>
-                  </table>
-                 </td>
-                </tr>
-               </table>
-              </td>
-            </tr>
-          </table>
-        </td>
-       </tr>
-      </table>
-     </td>
-    </tr>
-   </table>
-  </td>
- </tr>
- <tr>
-  <td>
-   %%[ if emailaddr =='' then ]%%
-   <table cellpadding="2" cellspacing="0" width="600" ID="Table5" Border=0>
-    <tr>
-     <td>
-      <font face="verdana" size="1" color="#444444">This email was sent by: 
-       <b>%%Member_Busname%%</b>
-       <br>
-       %%Member_Addr%% %%Member_City%%, %%Member_State%%, %%Member_PostalCode%%, %%Member_Country%%
-       <br>
-       <br>
-      </font>
-     </td>
-    </tr>
-   </table>
-   <table>
-    <tr>
-     <td>
-      <a href="%%profile_center_url%%" alias="Update Profile">Update Profile</a>
-     </td>
-    </tr>
-   </table>
-   %%[endif]%%
-  </td>
- </tr>
-</table>
+																						<table width="600" cellpadding="0" cellspacing="0"
+																							border="0" class="container">
+																							<tr>
+																								<td class="pad20">
+																									<table cellspacing="0" cellpadding="0"
+																										border="0" width="100%">
+																										<tr>
+																											<td align="center" style="
+																														padding-bottom: 10px;
+																														font-family: Arial,
+																															Helvetica,
+																															sans-serif;
+																														font-size: 12px;
+																														color: #777777;
+																													">
+																												ADVERTISEMENT
+																											</td>
+																										</tr>
+																									</table>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td align="center" style="
+																											padding-bottom: 20px;
+																										" class="mobile-hidden">
+																									<table width="100%" cellpadding="0"
+																										cellspacing="0" border="0">
+																										<tr>
+																											<td style="
+																														padding-right: 10px;
+																													">
+																												<table width="135" cellpadding="0"
+																													cellspacing="0" border="0">
+																													<tr>
+																														<td class="mobile-hidden">
+																															<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized))=%%"
+																																alias="IMG: Taboola Ad">
+																																<img width="135"
+																																	src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized,'&widget.alternative=Desktop')=%%" />
+																															</a>
+																														</td>
+																													</tr>
+																												</table>
+																											</td>
+																											<td style="
+																														padding-right: 10px;
+																														padding-left: 10px;
+																													">
+																												<table width="135" class="container"
+																													cellpadding="0" cellspacing="0"
+																													border="0">
+																													<tr>
+																														<td>
+																															<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized))=%%"
+																																alias="IMG: Taboola Ad">
+																																<img width="135"
+																																	src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized,'&widget.alternative=Desktop')=%%" />
+																															</a>
+																														</td>
+																													</tr>
+																												</table>
+																											</td>
+																											<td style="
+																														padding-right: 10px;
+																														padding-left: 10px;
+																													">
+																												<table width="135" class="container"
+																													cellpadding="0" cellspacing="0"
+																													border="0">
+																													<tr>
+																														<td>
+																															<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized))=%%"
+																																alias="IMG: Taboola Ad">
+																																<img width="135"
+																																	src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized,'&widget.alternative=Desktop')=%%" />
+																															</a>
+																														</td>
+																													</tr>
+																												</table>
+																											</td>
+																											<td style="
+																														padding-left: 10px;
+																													">
+																												<table width="135" class="container"
+																													cellpadding="0" cellspacing="0"
+																													border="0">
+																													<tr>
+																														<td>
+																															<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized))=%%"
+																																alias="IMG: Taboola Ad">
+																																<img width="135"
+																																	src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized,'&widget.alternative=Desktop')=%%" />
+																															</a>
+																														</td>
+																													</tr>
+																												</table>
+																											</td>
+																										</tr>
+																									</table>
+																								</td>
+																								<!--[if !mso]><!-- -->
+																								<td align="center" style="
+																											padding-bottom: 20px;
+																										" class="mobile-only">
+																									<div class="mobile-only" style="
+																												font-size: 0;
+																												max-height: 0;
+																												overflow: hidden;
+																												display: none;
+																											">
+																										<table width="100%" cellpadding="0"
+																											cellspacing="0" border="0">
+																											<tr>
+																												<td style="
+																															padding-left: 20px;
+																															padding-right: 20px;
+																														">
+																													<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=1'))=%%"
+																														alias="IMG: Taboola Ad">
+																														<img width="100%"
+																															class="image"
+																															src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=1&cmp=',@personalized)=%%" />
+																													</a>
+																												</td>
+																											</tr>
+																											<tr>
+																												<td style="
+																															padding-left: 20px;
+																															padding-right: 20px;
+																														">
+																													<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=2'))=%%"
+																														alias="IMG: Taboola Ad">
+																														<img width="100%"
+																															class="image"
+																															src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=2&cmp=',@personalized)=%%" />
+																													</a>
+																												</td>
+																											</tr>
+																											<tr>
+																												<td style="
+																															padding-left: 20px;
+																															padding-right: 20px;
+																														">
+																													<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=3'))=%%"
+																														alias="IMG: Taboola Ad">
+																														<img width="100%"
+																															class="image"
+																															src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=3&cmp=',@personalized)=%%" />
+																													</a>
+																												</td>
+																											</tr>
+																											<tr>
+																												<td style="
+																															padding-left: 20px;
+																															padding-right: 20px;
+																														">
+																													<a href="%%=redirectto(concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.click?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&cmp=',@personalized,'&source.url=',@taboolaStation,'&widget.slot=4'))=%%"
+																														alias="IMG: Taboola Ad">
+																														<img width="100%"
+																															class="image"
+																															src="%%=concat('http://mb.taboola.com/1.1/png/',@taboola,'/recommendations.get?recipient.hash.hex=',@hashValue,'&recipient.hash.method=sha256&instance.id=',jobID,'&widget.placement=', @taboolaType, '&widget.mode=thumbs-newsletter-a&source.url=',@taboolaStation,'&widget.slot=4&cmp=',@personalized)=%%" />
+																													</a>
+																												</td>
+																											</tr>
+																										</table>
+																									</div>
+																								</td>
+																								<!--<![endif]-->
+																							</tr>
+																						</table>
+																					</td>
+																				</tr>
+																				<tr>
+																					<td align="center">
+																						<!-- %%=contentblockbykey(concat('MasterFooter',@contentType))=%% -->
+																						<table width="600" class="container darkBG"
+																							cellpadding="0" cellspacing="0" border="0"
+																							bgcolor="%%=v(@bgcolor)=%%">
+																							<tr>
+																								<td align="center" style="
+																											padding-top: 20px;
+																											padding-bottom: 20px;
+																										">
+																									<table cellpadding="0" cellspacing="0"
+																										border="0">
+																										<tr>
+																											%%[
+																											if
+																											not
+																											empty(@faceBookURL)
+																											then
+																											]%%
+																											<td align="center" style="
+																														padding-left: 5px;
+																														padding-right: 5px;
+																													">
+																												<a href="%%=redirectto(@facebookURL)=%%"
+																													target="_blank"
+																													alias="facebook_footer"><img
+																														src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/e2159776-d178-4ed5-b55c-b2345e330f19.png"
+																														style="
+																																display: block;
+																																height: auto;
+																															" border="0" width="35" alt="facebook" /></a>
+																											</td>
+																											%%[
+																											endif
+																											]%%
+																											%%[
+																											if
+																											not
+																											empty(@twitterURL)
+																											then
+																											]%%
+																											<td align="center" style="
+																														padding-left: 5px;
+																														padding-right: 5px;
+																													">
+																												<a href="%%=redirectto(@twitterURL)=%%"
+																													target="_blank"
+																													alias="twitter_footer"><img
+																														src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/271e82ec-a79d-42e0-9410-b8316d577488.png"
+																														style="
+																																display: block;
+																																height: auto;
+																															" border="0" width="35" alt="twitter" /></a>
+																											</td>
+																											%%[
+																											endif
+																											]%%
+																											%%[
+																											if
+																											not
+																											empty(@instagramURL)
+																											then
+																											]%%
+																											<td align="center" style="
+																														padding-left: 5px;
+																														padding-right: 5px;
+																													">
+																												<a href="%%=redirectto(@instagramURL)=%%"
+																													target="_blank"
+																													alias="instagram_footer"><img
+																														src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/b889bfcf-a9a3-4659-86cd-1452a75515d2.png"
+																														style="
+																																display: block;
+																																height: auto;
+																															" border="0" width="35" alt="instagram" /></a>
+																											</td>
+																											%%[
+																											endif
+																											]%%
+																											%%[
+																											if
+																											not
+																											empty(@pinterestURL)
+																											then
+																											]%%
+																											<td align="center" style="
+																														padding-left: 5px;
+																														padding-right: 5px;
+																													">
+																												<a href="%%=redirectto(@pinterestURL)=%%"
+																													target="_blank"
+																													alias="pinterest_footer"><img
+																														src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/4658d392-8f9e-4ebe-a179-5fec45d1f4ed.png"
+																														style="
+																																display: block;
+																																height: auto;
+																															" border="0" width="35" alt="pinterest" /></a>
+																											</td>
+																											%%[
+																											endif
+																											]%%
+																											%%[
+																											if
+																											not
+																											empty(@youtubeURL)
+																											then
+																											]%%
+																											<td align="center" style="
+																														padding-left: 5px;
+																														padding-right: 5px;
+																													">
+																												<a href="%%=redirectto(@youtubeURL)=%%"
+																													target="_blank"
+																													alias="youtube_footer"><img
+																														src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/0ab9da1e-84a1-4fe8-94c7-dc6f3b1b0942.png"
+																														style="
+																																display: block;
+																																height: auto;
+																															" border="0" width="35" alt="youtube" /></a>
+																											</td>
+																											%%[
+																											endif
+																											]%%
+																											%%[
+																											if
+																											not
+																											empty(@contactEmail)
+																											then
+																											]%%
+																											<td align="center" style="
+																														padding-left: 5px;
+																														padding-right: 5px;
+																													">
+																												<a href="mailto:%%=v(@contactEmail)=%%"
+																													target="_blank"
+																													alias="youtube_footer"><img
+																														src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/aee8dd89-b26d-4344-b9d4-7091ef35a40c.png"
+																														style="
+																																display: block;
+																																height: auto;
+																															" border="0" width="35" alt="contact" /></a>
+																											</td>
+																											%%[
+																											endif
+																											]%%
+																										</tr>
+																									</table>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td class="darkText" align="center" style="
+																											font-family: Arial,
+																												Helvetica,
+																												sans-serif;
+																											color: #ffffff;
+																											font-size: 14px;
+																											line-height: 150%;
+																										">
+																									<strong>%%member_busname%%</strong>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td class="darkText" align="center" style="
+																											font-family: Arial,
+																												Helvetica,
+																												sans-serif;
+																											color: #ffffff;
+																											font-size: 14px;
+																											line-height: 150%;
+																										">
+																									%%member_addr%%
+																								</td>
+																							</tr>
+																							<tr>
+																								<td class="darkText" align="center" style="
+																											font-family: Arial,
+																												Helvetica,
+																												sans-serif;
+																											color: #ffffff;
+																											font-size: 14px;
+																											line-height: 150%;
+																											padding-bottom: 15px;
+																										">
+																									<span
+																										class="appleLinksWhite">%%member_city%%,
+																										%%member_state%%
+																										%%member_postalcode%%</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td class="darkText" align="center" style="
+																											font-family: Arial,
+																												Helvetica,
+																												sans-serif;
+																											color: #ffffff;
+																											font-size: 14px;
+																											line-height: 150%;
+																											padding-bottom: 20px;
+																										">
+																									<a href="%%=redirectto(@termsURL)=%%"
+																										target="_blank" alias="terms_footer"
+																										style="
+																												color: #ffffff;
+																												text-decoration: none;
+																											">Terms
+																										&
+																										Conditions</a>
+																									|
+																									<a href="%%=redirectto(@privacyURL)=%%"
+																										target="_blank" alias="privacy_footer"
+																										style="
+																												color: #ffffff;
+																												text-decoration: none;
+																											">Privacy
+																										Policy</a>
+																									|
+																									<a href="%%profile_center_url%%"
+																										target="_blank" alias="unsub_footer"
+																										style="
+																												color: #ffffff;
+																												text-decoration: none;
+																											">Unsubscribe</a>
+																								</td>
+																							</tr>
+																						</table>
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				%%[
+				if
+				emailaddr
+				==''
+				then
+				]%%
+				<table cellpadding="2" cellspacing="0" width="600" id="Table5" border="0">
+					<tr>
+						<td>
+							<font face="verdana" size="1" color="#444444">This
+								email
+								was
+								sent
+								by:
+								<b>%%Member_Busname%%</b>
+								<br />
+								%%Member_Addr%%
+								%%Member_City%%,
+								%%Member_State%%,
+								%%Member_PostalCode%%,
+								%%Member_Country%%
+								<br />
+								<br />
+							</font>
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							<a href="%%profile_center_url%%" alias="Update Profile">Update
+								Profile</a>
+						</td>
+					</tr>
+				</table>
+				%%[endif]%%
+			</td>
+		</tr>
+	</table>
 </body>
+
 </html>
