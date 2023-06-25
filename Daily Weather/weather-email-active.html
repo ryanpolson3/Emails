@@ -438,16 +438,19 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																							SET @row = row(@title,1)
 																							SET @storyTitle = field(@row,'value')
 																							ENDIF
+
 																							SET @description = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/description'),1)
 																							IF rowcount(@description) > 0 THEN
 																							SET @row = row(@description,1)
 																							SET @storyDescription = field(@row,'value')
 																							ENDIF
+
 																							SET @link = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/link'),1)
 																							IF rowcount(@link) > 0 THEN
 																							SET @row = row(@link,1)
 																							SET @storylink = field(@row,'value')
 																							ENDIF
+
 																							SET @image = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/enclosure'),1)
 																							IF rowcount(@image) > 0 THEN
 																							SET @row = row(@image,1)
