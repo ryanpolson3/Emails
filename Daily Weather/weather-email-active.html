@@ -1,14 +1,18 @@
 %%[
 
-SET @taboolaType ="weather-alert-thumbnails"
+SET @taboolaType = "weather-alert-thumbnails"
 SET @mid = memberid
 SET @type = 'ACTIVE'
 SET @emailStyle = 'weather'
 SET @contentRows = lookuprows(concat('ENT.Weather Content Data - ',@type),'mid',@mid)
 SET @count = rowcount(@contentRows)
+
+/* Checks Weather Content Data to see if there is a match */
 IF @count == 0 THEN
 raiseerror('There is no station associated with this MID',0)
 ENDIF
+
+/* If there is a match set these fields */
 SET @contentRow = row(@contentRows,1)
 SET @stationName = field(@contentRow,'stationName')
 SET @stationURL = field(@contentRow,'stationURL')
@@ -27,36 +31,50 @@ SET @contactEmail = field(@contentRow,'contactEmail')
 SET @taboola = field(@contentRow,'taboola')
 SET @powerURL = field(@contentRow,'powerURL')
 SET @weatherURL = Concat(@stationURL,'weather')
+
+/* Checks type */
 IF @type == 'dev' THEN
 SET @contentType = 'dev'
-else
+ELSE
 SET @contentType = ''
 ENDIF
+
+
 SET @date = format(now(),'MMMM d, yyyy')
 SET @subjectline = concat(@stationName,' weather forecast for ',@date)
 SET @length = Length(@stationName)
 SET @lastLetter = substring(@stationName,@length,1)
+
+/* Concats value at the end of station name */
 IF @lastLetter =="s"
 THEN
 SET @stationName = concat(@stationName, "'")
 ELSE
 SET @stationName = concat(@stationName, "'s")
 ENDIF
+
+
+/* RSSFeed */
 SET @xml = lookup(concat('ENT.Weather RSSFeed - ',@type),'RSSFeed','mid',@mid)
 SET @email_address = emailaddr
 SET @rows = LookupRows('ENT.Master Data - MID - ORGID','mid', @mid)
+
+/* Master Data Name */
 IF RowCount(@rows) == 1 THEN
 SET @row = Row(@rows,1)
 SET @Master_Data_Name = Field(@row,"Master_Data_Name")
 ENDIF
+
+/* Personalized Ad Optin - True */
 SET @rows = LookupRows(concat('ENT.',@Master_Data_Name),"user_uuid", _subscriberkey)
 IF RowCount(@rows) == 1 THEN
 SET @row = Row(@rows,1)
 SET @personalized_ad_optin = Field(@row,"personalized_ad_optin",0)
-)
 ENDIF
-IF @personalized_ad_optin =="" OR @personalized_ad_optin is NULL THEN
-SET @personalized_ad_optin ="False"
+
+/* Personalized Ad Optin - False */
+IF @personalized_ad_optin == "" OR @personalized_ad_optin is NULL THEN
+SET @personalized_ad_optin = "False"
 ENDIF
 
 ]%%
