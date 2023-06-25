@@ -6,7 +6,7 @@ SET @type = 'ACTIVE'
 SET @emailStyle = 'weather'
 SET @contentRows = lookuprows(concat('ENT.Weather Content Data - ',@type),'mid',@mid)
 SET @count = rowcount(@contentRows)
-if @count == 0 then
+IF @count == 0 then
 raiseerror('There is no station associated with this MID',0)
 endif
 SET @contentRow = row(@contentRows,1)
@@ -27,7 +27,7 @@ SET @contactEmail = field(@contentRow,'contactEmail')
 SET @taboola = field(@contentRow,'taboola')
 SET @powerURL = field(@contentRow,'powerURL')
 SET @weatherURL = Concat(@stationURL,'weather')
-if @type == 'dev' then
+IF @type == 'dev' then
 SET @contentType = 'dev'
 else
 SET @contentType = ''
@@ -406,22 +406,22 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																							%%[
 																							/* parse XML payload */
 																							SET @title = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/title'),1)
-																							if rowcount(@title) > 0 then
+																							IF rowcount(@title) > 0 then
 																							SET @row = row(@title,1)
 																							SET @storyTitle = field(@row,'value')
 																							endif
 																							SET @description = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/description'),1)
-																							if rowcount(@description) > 0 then
+																							IF rowcount(@description) > 0 then
 																							SET @row = row(@description,1)
 																							SET @storyDescription = field(@row,'value')
 																							endif
 																							SET @link = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/link'),1)
-																							if rowcount(@link) > 0 then
+																							IF rowcount(@link) > 0 then
 																							SET @row = row(@link,1)
 																							SET @storylink = field(@row,'value')
 																							endif
 																							SET @image = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/enclosure'),1)
-																							if rowcount(@image) > 0 then
+																							IF rowcount(@image) > 0 then
 																							SET @row = row(@image,1)
 																							SET @storyimage = field(@row,'url_att')
 																							endif
@@ -468,7 +468,7 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 		</tr>
 		<tr>
 			<td>
-				%%[ if emailaddr =='' then ]%%<table cellpadding="2" cellspacing="0" width="600" ID="Table5" Border=0>
+				%%[ IF emailaddr =='' then ]%%<table cellpadding="2" cellspacing="0" width="600" ID="Table5" Border=0>
 					<tr>
 						<td>
 							<font face="verdana" size="1" color="#444444">This email was sent by:
