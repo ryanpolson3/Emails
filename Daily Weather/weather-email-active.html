@@ -8,7 +8,7 @@ SET @contentRows = lookuprows(concat('ENT.Weather Content Data - ',@type),'mid',
 SET @count = rowcount(@contentRows)
 IF @count == 0 then
 raiseerror('There is no station associated with this MID',0)
-endif
+ENDIF
 SET @contentRow = row(@contentRows,1)
 SET @stationName = field(@contentRow,'stationName')
 SET @stationURL = field(@contentRow,'stationURL')
@@ -31,7 +31,7 @@ IF @type == 'dev' then
 SET @contentType = 'dev'
 else
 SET @contentType = ''
-endif
+ENDIF
 SET @date = format(now(),'MMMM d, yyyy')
 SET @subjectline = concat(@stationName,' weather forecast for ',@date)
 SET @length = Length(@stationName)
@@ -409,22 +409,22 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																							IF rowcount(@title) > 0 then
 																							SET @row = row(@title,1)
 																							SET @storyTitle = field(@row,'value')
-																							endif
+																							ENDIF
 																							SET @description = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/description'),1)
 																							IF rowcount(@description) > 0 then
 																							SET @row = row(@description,1)
 																							SET @storyDescription = field(@row,'value')
-																							endif
+																							ENDIF
 																							SET @link = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/link'),1)
 																							IF rowcount(@link) > 0 then
 																							SET @row = row(@link,1)
 																							SET @storylink = field(@row,'value')
-																							endif
+																							ENDIF
 																							SET @image = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/enclosure'),1)
 																							IF rowcount(@image) > 0 then
 																							SET @row = row(@image,1)
 																							SET @storyimage = field(@row,'url_att')
-																							endif
+																							ENDIF
 																							]%%
 																							<tr>
 																								<td>
@@ -487,7 +487,7 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 							<a href="%%profile_center_url%%" alias="Update Profile">Update Profile</a>
 						</td>
 					</tr>
-				</table>%%[endif]%%
+				</table>%%[ENDIF]%%
 			</td>
 		</tr>
 	</table>
