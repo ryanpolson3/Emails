@@ -1,48 +1,48 @@
 %%[
 
 SET @taboolaType ="weather-alert-thumbnails"
-set @mid = memberid
-set @type = 'ACTIVE'
-set @emailStyle = 'weather'
-set @contentRows = lookuprows(concat('ENT.Weather Content Data - ',@type),'mid',@mid)
-set @count = rowcount(@contentRows)
+SET @mid = memberid
+SET @type = 'ACTIVE'
+SET @emailStyle = 'weather'
+SET @contentRows = lookuprows(concat('ENT.Weather Content Data - ',@type),'mid',@mid)
+SET @count = rowcount(@contentRows)
 if @count == 0 then
 raiseerror('There is no station associated with this MID',0)
 endif
-set @contentRow = row(@contentRows,1)
-set @stationName = field(@contentRow,'stationName')
-set @stationURL = field(@contentRow,'stationURL')
-set @rssFeed = field(@contentRow,'stationRSS')
-set @logoImage = field(@contentRow,'logoImage')
-set @bgColor = field(@contentRow,'backgroundColor')
-set @privacyURL = field(@contentRow,'privacyURL')
-set @termsURL = field(@contentRow,'termsURL')
-set @facebookURL = field(@contentRow,'facebookURL')
-set @twitterURL = field(@contentRow,'twitterURL')
-set @instagramURL = field(@contentRow,'instagramURL')
-set @pinterestURL = field(@contentRow,'pinterestURL')
-set @youtubeURL = field(@contentRow,'youtubeURL')
-set @signupURL = field(@contentRow,'signupURL')
-set @contactEmail = field(@contentRow,'contactEmail')
-set @taboola = field(@contentRow,'taboola')
-set @powerURL = field(@contentRow,'powerURL')
-set @weatherURL = Concat(@stationURL,'weather')
+SET @contentRow = row(@contentRows,1)
+SET @stationName = field(@contentRow,'stationName')
+SET @stationURL = field(@contentRow,'stationURL')
+SET @rssFeed = field(@contentRow,'stationRSS')
+SET @logoImage = field(@contentRow,'logoImage')
+SET @bgColor = field(@contentRow,'backgroundColor')
+SET @privacyURL = field(@contentRow,'privacyURL')
+SET @termsURL = field(@contentRow,'termsURL')
+SET @facebookURL = field(@contentRow,'facebookURL')
+SET @twitterURL = field(@contentRow,'twitterURL')
+SET @instagramURL = field(@contentRow,'instagramURL')
+SET @pinterestURL = field(@contentRow,'pinterestURL')
+SET @youtubeURL = field(@contentRow,'youtubeURL')
+SET @signupURL = field(@contentRow,'signupURL')
+SET @contactEmail = field(@contentRow,'contactEmail')
+SET @taboola = field(@contentRow,'taboola')
+SET @powerURL = field(@contentRow,'powerURL')
+SET @weatherURL = Concat(@stationURL,'weather')
 if @type == 'dev' then
-set @contentType = 'dev'
+SET @contentType = 'dev'
 else
-set @contentType = ''
+SET @contentType = ''
 endif
-set @date = format(now(),'MMMM d, yyyy')
-set @subjectline = concat(@stationName,' weather forecast for ',@date)
-Set @length = Length(@stationName)
-Set @lastLetter = substring(@stationName,@length,1)
+SET @date = format(now(),'MMMM d, yyyy')
+SET @subjectline = concat(@stationName,' weather forecast for ',@date)
+SET @length = Length(@stationName)
+SET @lastLetter = substring(@stationName,@length,1)
 IF @lastLetter =="s"
 THEN
 SET @stationName = concat(@stationName, "'")
 ELSE
 SET @stationName = concat(@stationName, "'s")
 ENDIF
-set @xml = lookup(concat('ENT.Weather RSSFeed - ',@type),'RSSFeed','mid',@mid)
+SET @xml = lookup(concat('ENT.Weather RSSFeed - ',@type),'RSSFeed','mid',@mid)
 SET @email_address = emailaddr
 SET @rows = LookupRows('ENT.Master Data - MID - ORGID','mid', @mid)
 IF RowCount(@rows) == 1 THEN
@@ -392,7 +392,7 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																				<tr>
 																					<td>
 																						<!-- Sponsor Logo Image only -->
-																						%%[ set @sponsor = treatascontent(field(@contentRow,'sponsorWeather')) ]%%
+																						%%[ SET @sponsor = treatascontent(field(@contentRow,'sponsorWeather')) ]%%
 																						<!-- CB: SponsorLogoAMPScript -->
 																						%%=ContentBlockByID("6454")=%%
 																						<!-- CB: SponsorLogoImage -->
@@ -405,25 +405,25 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																						<table cellpadding="0" cellspacing="0" border="0" width="100%">
 																							%%[
 																							/* parse XML payload */
-																							set @title = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/title'),1)
+																							SET @title = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/title'),1)
 																							if rowcount(@title) > 0 then
-																							set @row = row(@title,1)
-																							set @storyTitle = field(@row,'value')
+																							SET @row = row(@title,1)
+																							SET @storyTitle = field(@row,'value')
 																							endif
-																							set @description = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/description'),1)
+																							SET @description = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/description'),1)
 																							if rowcount(@description) > 0 then
-																							set @row = row(@description,1)
-																							set @storyDescription = field(@row,'value')
+																							SET @row = row(@description,1)
+																							SET @storyDescription = field(@row,'value')
 																							endif
-																							set @link = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/link'),1)
+																							SET @link = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/link'),1)
 																							if rowcount(@link) > 0 then
-																							set @row = row(@link,1)
-																							set @storylink = field(@row,'value')
+																							SET @row = row(@link,1)
+																							SET @storylink = field(@row,'value')
 																							endif
-																							set @image = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/enclosure'),1)
+																							SET @image = buildRowSetFromXML(@xml,concat('//channel/item[',1,']/enclosure'),1)
 																							if rowcount(@image) > 0 then
-																							set @row = row(@image,1)
-																							set @storyimage = field(@row,'url_att')
+																							SET @row = row(@image,1)
+																							SET @storyimage = field(@row,'url_att')
 																							endif
 																							]%%
 																							<tr>
