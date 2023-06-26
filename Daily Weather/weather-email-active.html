@@ -551,7 +551,60 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																													<tr>
 																														<td align="center">
 																															%%[ set @advertisement = treatascontent(field(@contentRow,'advertisement1')) ]%%
-																															%%=contentblockbykey('AdvertisementBlock')=%%
+																															<!-- %%=contentblockbykey('AdvertisementBlock')=%% -->
+																															<table width="600" class="container" cellpadding="0" cellspacing="0" border="0">
+																																<tr>
+																																	<td class="pad20">
+																																		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+																																			<tr>
+																																				<td align="center" style="padding-bottom: 10px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #777777;">
+																																					ADVERTISEMENT
+																																				</td>
+																																			</tr>
+																																		</table>
+																																	</td>
+																																</tr>
+																																<tr>
+																																	<td style="padding-bottom: 20px" class="pad20">
+																																		<!-- POWERINBOX 970x250 ; added d to below variable that was avertisement -->
+																																		<div class="pi_%%=v(@advertisement)=%% powerinbox">
+																																			<!-- domain: %%=v(@powerURL)=%% -->
+																																			<!--[if (gte mso 9)|(IE)]><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td><![endif]-->
+																																			<table width="600" align="center" border="0" cellpadding="0" cellspacing="0"
+																																				style="width: 100%; max-width: 600px">
+																																				<tr>
+																																					<td align="center">
+																																						<a href="%%=redirectto(concat('https://rs-stripe.',@powerURL,'/stripe/redirect?cs_stripeid=',@advertisement,'&cs_offset=0&cs_email=',_subscriberkey,'&cs_sendid=',jobID,'&cs_esp=salesforcemarketing&dfp_senddate={PLACEHOLDER1}&dfp_SSO={true,false,null}'))=%%"
+																																							style="border-style: none; outline: none; text-decoration: none" target="_blank" rel="nofollow noopener" alias="IMG: Ad">
+																																							<img alt="" height="auto"
+																																								src="%%=concat('https://rs-stripe.',@powerURL,'/stripe/image?cs_stripeid=',@advertisement,'&cs_offset=0&cs_email=',_subscriberkey,'&cs_sendid=',jobID,'&cs_esp=salesforcemarketing&dfp_senddate={PLACEHOLDER1}&dfp_SSO={true,false,null}')=%%"
+																																								style=" display: block; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; width: 100%; max-width: 600px;" width="600" />
+																																						</a>
+																																					</td>
+																																				</tr>
+																																			</table>
+																																			<table width="600" align="center" border="0" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px">
+																																				<tr>
+																																					<td align="center" height="3" valign="top" style="font-size: 3px; height: 3px; line-height: 3px; vertical-align: top;">
+																																						&nbsp;
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td align="right">
+																																						<a href="%%=redirectto(concat('https://rs-stripe.',@powerURL,'/branding/?utm_source=contentstripe&utm_campaign=rs_',@advertisement,'&utm_medium=email&utm_content=logo&rs_type=dfp'))=%%"
+																																							style="display: inline-block; border: 0; outline: none; text-decoration: none;"
+																																							target="_blank" rel="nofollow noopener" alias="LNK: Ad">
+																																							<img src="%%=concat('https://rs-stripe.',@powerURL,'/branding/recommend/powerinbox-rec-reg.png')=%%" width="154" height="15" border="0" alt="Learn more about RevenueStripe..." />
+																																						</a>
+																																					</td>
+																																				</tr>
+																																			</table>
+																																			<!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+																																		</div>
+																																		<!-- POWERINBOX 970x250 -->
+																																	</td>
+																																</tr>
+																															</table>
 																														</td>
 																													</tr>
 																													<tr>
