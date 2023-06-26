@@ -30,7 +30,7 @@ SET @signupURL = field(@contentRow,'signupURL')
 SET @contactEmail = field(@contentRow,'contactEmail')
 SET @taboola = field(@contentRow,'taboola')
 SET @powerURL = field(@contentRow,'powerURL')
-SET @weatherURL = Concat(@stationURL,'weather') /* Is this supposed to be sponsorWeather?*/
+SET @weatherURL = Concat(@stationURL,'weather')
 
 /* Checks type */
 IF @type == 'dev' THEN
