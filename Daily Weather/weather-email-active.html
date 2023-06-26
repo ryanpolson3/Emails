@@ -610,7 +610,7 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																													<tr>
 																														<td width="100%">
 																															<!-- Link to Weather page 3546 3504 -->
-																															%%=ContentBlockByID(3504)=%%
+																															%%=ContentBlockByID(3504)=%% <!-- No Edit Access -->
 																														</td>
 																													</tr>
 																													<tr>
@@ -627,8 +627,7 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																							<tr>
 																								<td width="100%">
 																									<!-- Link to Weather page set @xml = substring(@xml,2,200) 3546 3504 -->
-																									%%=ContentBlockByID(3546)=%%
-																									<!-- No Edit Access -->
+																									%%=ContentBlockByID(3546)=%% <!-- No Edit Access -->
 																								</td>
 																							</tr>
 																						</table>
@@ -643,12 +642,10 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																						set @taboolaStation = urlencode(@stationURL)
 
 																						IF @personalized_ad_optin =="True" THEN
-
-																						Set @personalized ="1" ELSE
+																						Set @personalized ="1"
+																						ELSE
 																						Set @personalized ="0"
-
 																						ENDIF
-
 																						]%%
 																						<table width="600" cellpadding="0" cellspacing="0" border="0" class="container">
 																							<tr>
@@ -778,52 +775,52 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 																								<td align="center" style="padding-top: 20px; padding-bottom: 20px;">
 																									<table cellpadding="0" cellspacing="0" border="0">
 																										<tr>
-																											%%[ if not empty(@faceBookURL) then ]%%
+																											%%[ IF NOT EMPTY(@faceBookURL) THEN ]%%
 																											<td align="center" style="padding-left: 5px; padding-right: 5px;">
 																												<a href="%%=redirectto(@facebookURL)=%%" target="_blank" alias="facebook_footer">
 																													<img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/e2159776-d178-4ed5-b55c-b2345e330f19.png" style="display: block; height: auto;" border="0" width="35" alt="facebook" /></a>
 																											</td>
-																											%%[endif]%%
+																											%%[ENDIF]%%
 
-																											%%[ if not empty(@twitterURL) then ]%%
+																											%%[ IF NOT EMPTY(@twitterURL) THEN ]%%
 																											<td align="center" style="padding-left: 5px; padding-right: 5px;">
 																												<a href="%%=redirectto(@twitterURL)=%%" target="_blank" alias="twitter_footer">
 																													<img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/271e82ec-a79d-42e0-9410-b8316d577488.png" style="display: block; height: auto;" border="0" width="35" alt="twitter" />
 																												</a>
 																											</td>
-																											%%[endif]%%
+																											%%[ENDIF]%%
 
-																											%%[ if not empty(@instagramURL) then ]%%
+																											%%[ IF NOT EMPTY(@instagramURL) THEN ]%%
 																											<td align="center" style="padding-left: 5px; padding-right: 5px;">
 																												<a href="%%=redirectto(@instagramURL)=%%" target="_blank" alias="instagram_footer">
 																													<img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/b889bfcf-a9a3-4659-86cd-1452a75515d2.png" style="display: block; height: auto;" border="0" width="35" alt="instagram" />
 																												</a>
 																											</td>
-																											%%[endif]%%
+																											%%[ENDIF]%%
 
-																											%%[ if not empty(@pinterestURL) then ]%%
+																											%%[ IF NOT EMPTY(@pinterestURL) THEN ]%%
 																											<td align="center" style="padding-left: 5px; padding-right: 5px;">
 																												<a href="%%=redirectto(@pinterestURL)=%%" target="_blank" alias="pinterest_footer">
 																													<imgsrc="http: //image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/4658d392-8f9e-4ebe-a179-5fec45d1f4ed.png" style="display: block;height: auto;" border="0" width="35" alt="pinterest" />
 																												</a>
 																											</td>
-																											%%[endif]%%
+																											%%[ENDIF]%%
 
-																											%%[ if not empty(@youtubeURL) then ]%%
+																											%%[ IF NOT EMPTY(@youtubeURL) THEN ]%%
 																											<td align="center" style="padding-left: 5px; padding-right: 5px;">
 																												<a href="%%=redirectto(@youtubeURL)=%%" target="_blank" alias="youtube_footer">
 																													<img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/0ab9da1e-84a1-4fe8-94c7-dc6f3b1b0942.png" style="display: block; height: auto;" border="0" width="35" alt="youtube" />
 																												</a>
 																											</td>
-																											%%[endif]%%
+																											%%[ENDIF]%%
 
-																											%%[ if not empty(@contactEmail) then ]%%
+																											%%[ IF NOT EMPTY(@contactEmail) THEN ]%%
 																											<td align="center" style="padding-left: 5px; padding-right: 5px;">
 																												<a href="mailto:%%=v(@contactEmail)=%%" target="_blank" alias="youtube_footer">
 																													<img src="http://image.news.sbgtv.com/lib/fe2e11717164057f721d74/m/1/aee8dd89-b26d-4344-b9d4-7091ef35a40c.png" style="display: block; height: auto;" border="0" width="35" alt="contact" />
 																												</a>
 																											</td>
-																											%%[endif]%%
+																											%%[ENDIF]%%
 																										</tr>
 																									</table>
 																								</td>
@@ -875,13 +872,15 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 		</tr>
 		<tr>
 			<td>
-				%%[ IF emailaddr =='' THEN ]%%<table cellpadding="2" cellspacing="0" width="600" ID="Table5" Border=0>
+				%%[ IF emailaddr =='' THEN ]%%
+				<table cellpadding="2" cellspacing="0" width="600" ID="Table5" Border=0>
 					<tr>
 						<td>
-							<font face="verdana" size="1" color="#444444">This email was sent by:
-								<b>%%Member_Busname%%
-								</b>
-								<br>%%Member_Addr%% %%Member_City%%, %%Member_State%%, %%Member_PostalCode%%, %%Member_Country%%
+							<font face="verdana" size="1" color="#444444">
+								This email was sent by:
+								<b>%%Member_Busname%%</b>
+								<br>
+								%%Member_Addr%% %%Member_City%%, %%Member_State%%, %%Member_PostalCode%%, %%Member_Country%%
 								<br>
 								<br>
 							</font>
@@ -894,7 +893,8 @@ tr { font-size:0px; line-height:0px; border-collapse: collapse; }
 							<a href="%%profile_center_url%%" alias="Update Profile">Update Profile</a>
 						</td>
 					</tr>
-				</table>%%[ENDIF]%%
+				</table>
+				%%[ENDIF]%%
 			</td>
 		</tr>
 	</table>
